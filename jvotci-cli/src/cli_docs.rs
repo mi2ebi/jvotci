@@ -16,7 +16,7 @@ pub fn var_then(s: &str, t: &str) -> String { format!("{BOLD}{ITALIC}{CYAN}{s}{t
 
 fn ques(s: &str) -> String { format!("{s}?") }
 
-const VERSION: &str = "(3.0.0 dev)";
+const VERSION: &str = concat!("(", env!("CARGO_PKG_VERSION"), ")");
 
 const SP: &str = " ";
 const NL: &str = "\n";
@@ -30,7 +30,7 @@ macro_rules! cat {
 }
 
 pub static VERSTR: LazyLock<String> =
-    LazyLock::new(|| cat![YELLOW, BOLD, "jvot3 ", VERSION, RESET]);
+    LazyLock::new(|| cat![YELLOW, BOLD, "jvotci ", VERSION, RESET]);
 
 pub static TUI_DOCS: LazyLock<String> = LazyLock::new(|| {
     cat![

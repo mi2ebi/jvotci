@@ -958,7 +958,7 @@ impl<'a> Unitifier<'a> {
 ///
 /// The input is assumed to be 100% Lojban, so e.g. uses of *la'oi .whatever.*
 /// and *zoizoi. whatever .zoi* will probably error in some way. (We can't
-/// handle these without considering grammar, which jvot3 isn't concerned with,
+/// handle these without considering grammar, which jvotci isn't concerned with,
 /// so this is a wontfix.)
 ///
 /// # Errors

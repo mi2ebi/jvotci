@@ -1,7 +1,7 @@
 use std::io::{Write as _, stdout};
 
 use flower_pot::{BOLD, BRIGHT_CYAN as CYAN, BRIGHT_RED as RED, RESET};
-use jvot3::{
+use jvotci::{
     settings::{
         HyphenSetting::{AllowY, ForceY, Standard},
         Settings,

@@ -1,0 +1,20 @@
+[package]
+name = "jvotci-cli"
+description = "Interactive tools for creating and decomposing Lojban lujvo."
+keywords = ["lojban", "lujvo", "linguistics", "cli"]
+categories = ["command-line-utilities"]
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+jvotci.workspace = true
+flower-pot = "0.1.9"
+rustyline = "19.0.0"
+
+[[bin]]
+name = "jvotci"
+path = "src/main.rs"
+doc = false

@@ -1,12 +1,12 @@
-# jvot3
+# jvotci
 
 Tools for creating and decomposing Lojban lujvo.
 
-jvot3 is the successor to
+jvotci is the successor to
 [latkerlo-jvotci](https://github.com/latkerlo/latkerlo-jvotci).  It's
-a separate crate because, for the most part, jvot3 is a complete
-rewrite not authored by latkerlo.  jvot3 does take these elements from
-latkerlo-jvotci:
+a separate crate because, for the most part, jvotci is a complete
+rewrite not authored by latkerlo.  jvotci does take these elements
+from latkerlo-jvotci:
 
 - lists of consonant clusters, rafsi, etc. (these are just "facts
   about Lojban" that anyone implementing a jvotci would need to have)
@@ -22,12 +22,31 @@ latkerlo-jvotci is itself based on
 - [sozysozbot jvozba](https://github.com/sozysozbot/sozysozbot_jvozba)
   by sozysozbot
 
-jvot3 is licensed under the MIT license. See [LICENSE.md](LICENSE.md)
+jvotci is licensed under the MIT license. See [LICENSE.md](LICENSE.md)
 for more details.
+
+The current version of jvotci is jvot3. There may be a j4tci in the
+distant future.
+
+## Using the CLI
+
+Installing:
+
+```sh
+cargo install jvotci-cli
+```
+
+This will produce a binary just named `jvotci`.
+
+Development uses an alias `cli` for `run -p jvotci-cli --`:
+
+```sh
+cargo cli
+```
 
 ## Differences from latkerlo-jvotci
 
-jvot3
+jvotci
 
 - is only written in 1 programming language (Rust), but **(todo)**
   targets WebAssembly to compensate
