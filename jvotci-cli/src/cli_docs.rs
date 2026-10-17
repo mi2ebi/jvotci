@@ -16,7 +16,11 @@ pub fn var_then(s: &str, t: &str) -> String { format!("{BOLD}{ITALIC}{CYAN}{s}{t
 
 fn ques(s: &str) -> String { format!("{s}?") }
 
-const VERSION: &str = concat!("(", env!("CARGO_PKG_VERSION"), ")");
+const VERSION: &str = if cfg!(debug_assertions) {
+    concat!("(", env!("CARGO_PKG_VERSION"), " dev)")
+} else {
+    concat!("(", env!("CARGO_PKG_VERSION"), ")")
+};
 
 const SP: &str = " ";
 const NL: &str = "\n";
