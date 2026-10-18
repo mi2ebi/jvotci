@@ -54,7 +54,7 @@ impl Settings {
 macro_rules! extract_settings {
     ($settings:expr; $($field:ident),+) => {
         $crate::settings::Settings {
-            $($field: ($settings).$field),+,
+            $($field: ($settings).$field,)+
             ..$crate::settings::Settings::CLL
         }
     }
