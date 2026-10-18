@@ -2247,13 +2247,16 @@ mod tests {
         settings::Settings,
     };
     const CLL: Settings = Settings::CLL;
+    const PERMISSIVE: Settings = Settings::PERMISSIVE;
     #[test]
     fn lensisku_valid() {
-        assert_eq!(Rafste::lensisku().validate(CLL), Ok(()));
+        assert_eq!(Rafste::lensisku().validate(CLL), Ok(()), "cll");
+        assert_eq!(Rafste::lensisku().validate(PERMISSIVE), Ok(()), "permissive");
     }
     #[test]
     fn mati_valid() {
-        assert_eq!(Rafste::mati().validate(CLL), Ok(()));
+        assert_eq!(Rafste::mati().validate(CLL), Ok(()), "cll");
+        assert_eq!(Rafste::mati().validate(PERMISSIVE), Ok(()), "permissive");
     }
     #[test]
     fn duplicate_shape_mn_invalid() {
