@@ -21,9 +21,9 @@ use crate::{
         What, invalid_cluster_from_triple, invalid_from_pair,
     },
     phonology::{
-        deannotate_glide, is_annotated_offglide, is_annotated_onglide, is_banned_triple,
-        is_consonant, is_diphthong, is_hard_consonant, is_sonorant, is_valid, is_vowel,
-        strip_stress_accent,
+        could_be_glide, deannotate_glide, is_annotated_offglide, is_annotated_onglide,
+        is_banned_triple, is_consonant, is_diphthong, is_hard_consonant, is_sonorant, is_valid,
+        is_vowel, strip_stress_accent,
     },
     settings::Settings,
     syllables::{
@@ -584,7 +584,7 @@ fn annotate_glides(input: &str) -> Result<Vec<char>, Jvofli> {
     for i in (0 .. chars.len()).rev() {
         let c = chars[i];
         let (base, stressed) = strip_stress_accent(c);
-        if !matches!(base, 'i' | 'u') {
+        if !could_be_glide(base) {
             continue;
         }
         let (on, off) = if base == 'i' { ('q', 'ĭ') } else { ('w', 'ŭ') };
@@ -844,7 +844,7 @@ impl<'a> Unitifier<'a> {
             return Ok(());
         }
         // onglide time
-        if matches!(c, 'i' | 'u') {
+        if could_be_glide(c) {
             let nucleus = self.take_nucleus()?;
             self.pending_unit.push(Syllable {
                 onset: Onglide(c),
