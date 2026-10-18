@@ -28,15 +28,15 @@ impl Gismu {
         let shaped = match chars[..] {
             [a, b, c, d, e] => {
                 is_hard_consonant(a)
+                    && is_hard_consonant(d)
+                    && is_stressable_vowel(e)
+                    && !is_stressed(e)
                     && (is_hard_consonant(b)
                         && is_stressable_vowel(c)
                         && is_initial(a, b, settings)
                         || is_stressable_vowel(b)
                             && is_hard_consonant(c)
                             && is_valid(c, d, settings))
-                    && is_hard_consonant(d)
-                    && is_stressable_vowel(e)
-                    && !is_stressed(e)
             }
             _ => false,
         };

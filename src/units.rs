@@ -145,7 +145,7 @@ fn split_into_coda_and_consonantal(
     {
         return Ok((None, pairs));
     }
-    Err(Invalid { what: What::ConsonantRun, value: chars.iter().rev().collect::<String>() })
+    Err(Invalid { what: What::Cluster, value: chars.iter().rev().collect::<String>() })
 }
 
 // - cmavo detection -
@@ -795,7 +795,7 @@ impl<'a> Unitifier<'a> {
             return Ok((onset, new_coda));
         }
         Err(best_err.unwrap_or_else(|| Invalid {
-            what: What::ConsonantRun,
+            what: What::Cluster,
             value: self.pending_consonants.iter().rev().collect(),
         }))
     }

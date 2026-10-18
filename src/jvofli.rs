@@ -13,7 +13,6 @@ use crate::rafsi::RafsiShape;
 pub enum What {
     Cluster,
     Cmavo,
-    ConsonantRun,
     ConsonantalSyllable,
     Diphthong,
     Gismu,
@@ -26,7 +25,6 @@ impl Display for What {
         #[allow(clippy::enum_glob_use, reason = "no silly named wildcards")] use What::*;
         match self {
             Cluster => write!(f, "cluster"),
-            ConsonantRun => write!(f, "consonant run"),
             ConsonantalSyllable => write!(f, "consonantal syllable"),
             Diphthong => write!(f, "diphthong"),
             Nucleus => write!(f, "nucleus"),
