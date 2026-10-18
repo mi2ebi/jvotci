@@ -14,7 +14,7 @@ pub enum HyphenSetting {
 use HyphenSetting::{AllowY, Standard};
 
 #[expect(clippy::struct_excessive_bools, reason = "there isn't a Settings::new()")]
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 /// The settings!
 pub struct Settings {
     /// Whether the lujvo should end in a consonant. This only affects
@@ -28,8 +28,9 @@ pub struct Settings {
     pub arbitrary_cmavo_rafsi: bool,
     /// Whether *mz* is considered a valid consonant cluster.
     pub allow_mz: bool,
-    /// Whether slinku'i are valid words. If so e.g. *paslinku'i* is considered
-    /// a tosmabru.
+    /// Whether to disregard the concept of slinku'i. If so, e.g. *paslinku'i*
+    /// will be considered a tosmabru. The one exception is CCV'V which is
+    /// considered a slinku'i regardless (cf. [`crate::jvofli::Jvofli::CCVhV`]).
     pub no_slinkuhi: bool,
 }
 
