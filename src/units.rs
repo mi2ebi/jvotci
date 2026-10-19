@@ -655,7 +655,7 @@ fn check_cmevla(pg: &str, settings: Settings) -> Result<(), Jvofli> {
             c if is_annotated_onglide(c)
                 && (before.is_some_and(is_consonant) || after.is_some_and(is_consonant)) =>
             {
-                return Err(OnglideInCluster(c));
+                return Err(OnglideInCluster(deannotate_glide(c)));
             }
             _ => {}
         }
