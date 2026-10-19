@@ -200,8 +200,8 @@ prepend a CV cmavo and get a valid brivla. For example
 
 - *\*slinku'i* is an invalid zi'evla because you can prepend *no* to
   get *nos-lin-ku'i*
-- *\*klingonygu'e* is an invalid lujvo (of *klingona gugde*) because
-  prepending *pa* gives *pak-lin-gon-y-gu'e*
+- *\*klingonygu'e* is an invalid zvejvo (of *klingona gugde*) because
+  prepending *pa* gives the CLLjvo *pak-lin-gon-y-gu'e*
 
 ### Sli'ykru
 
