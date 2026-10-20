@@ -86,10 +86,7 @@ pub(crate) fn classify_rafsi(
                     return Prefix;
                 }
                 if is_diphthong(c1, c2) {
-                    if elided {
-                        return Truncated;
-                    }
-                    return End { h: false };
+                    return if elided { Truncated } else { End { h: false } };
                 }
             }
         }

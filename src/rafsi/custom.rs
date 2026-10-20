@@ -30,7 +30,7 @@ pub struct Rafste {
 /// Wrapper type for things that can have rafsi.
 pub enum Selrafsi {
     Gismu(Gismu),
-    Cmavo(Cmavo),
+    Cmavo(Cmavo), // todo can't contain y
     Zihevla(Zihevla),
 }
 
@@ -55,7 +55,7 @@ impl Rafste {
         word: &str,
         settings: Settings,
     ) -> Result<Option<String>, Jvofli> {
-        Self::check_against(self.marafsi(word).unwrap_or_default(), rafsi, word, settings)?;
+        Self::check_against(self.rafsi_of(word).unwrap_or_default(), rafsi, word, settings)?;
         Ok(self.assign_unchecked(rafsi, word))
     }
 
@@ -106,9 +106,7 @@ impl Rafste {
         Ok(())
     }
 
-    /// # Panics
-    ///
-    /// If any rafsi is assigned multiple times.
+    /// Panics on duplicates.
     pub(crate) fn from_words(words: &[(&str, &[&str])]) -> Self {
         let mut result = Self::empty();
         for &(word, rafsi) in words {
@@ -116,7 +114,7 @@ impl Rafste {
             result.add_word(word);
             for &r in rafsi {
                 assert!(
-                    !result.marafsi(word).unwrap_or_default().iter().any(|x| x == r),
+                    !result.rafsi_of(word).unwrap_or_default().iter().any(|x| x == r),
                     "rafsi {{{r}}} assigned to {{{word}}} multiple times"
                 );
                 assert!(
@@ -183,13 +181,13 @@ impl Rafste {
 
     #[must_use]
     /// Gets the word `rafsi` is assigned to, if it exists.
-    pub fn rafsima(&self, rafsi: &str) -> Option<&str> {
+    pub fn word_of(&self, rafsi: &str) -> Option<&str> {
         self.by_rafsi.get(rafsi).map(String::as_str)
     }
 
     #[must_use]
     /// Tries to get the rafsi `word` has, in assignment order.
-    pub fn marafsi(&self, word: &str) -> Option<&[String]> {
+    pub fn rafsi_of(&self, word: &str) -> Option<&[String]> {
         self.by_word.get(word).map(Vec::as_slice)
     }
 }
