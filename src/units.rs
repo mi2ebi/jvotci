@@ -1,5 +1,7 @@
 //! Types and parsers for units, strings of Lojban that match `cmavo*
-//! prebrivla?`. (See the jargon docs for more details.)
+//! prebrivla?`. (See [the jargon docs] for more details.)
+//!
+//! [the jargon docs]: https://github.com/mi2ebi/jvotci/blob/main/docs/jargon.md
 
 use std::{
     collections::VecDeque,

@@ -68,9 +68,6 @@ pub(crate) fn classify_rafsi(
     next_char: Option<char>,
     settings: Settings,
 ) -> RafsiShape {
-    /*  if let Some(bad) = text.chars().find(|c| !c.is_ascii()) {
-        return Err(NonLojbanCharacter(bad));
-    }*/
     let elided = next_char == Some('y');
     let bytes = text.as_bytes();
     if let &[b0, b1, b2] = bytes {
