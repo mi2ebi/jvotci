@@ -55,7 +55,7 @@ fn main() {
             Ok(input) => {
                 print!("{RESET}");
                 stdout().flush().unwrap();
-                rl.add_history_entry(input.as_str()).ok();
+                let _ = rl.add_history_entry(input.as_str());
                 let rest = input.trim();
                 if rest.is_empty() {
                     println!("{}", *EMPTY_INPUT_HINT);

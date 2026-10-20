@@ -89,7 +89,6 @@ const INITIAL_TABLE: [u32; 25] = [
 
 /// Returns whether `c` is a stressable vowel (including when actually
 /// stressed): *a e i o u*.
-#[inline]
 #[must_use]
 pub const fn is_stressable_vowel(c: char) -> bool {
     matches!(c, 'a' | 'e' | 'i' | 'o' | 'u' | 'á' | 'é' | 'í' | 'ó' | 'ú')
@@ -97,33 +96,27 @@ pub const fn is_stressable_vowel(c: char) -> bool {
 
 /// Returns whether `c` is a vowel, i.e. including *y*, optionally with a stress
 /// mark (even for *y*, to produce better error messages).
-#[inline]
 #[must_use]
 pub const fn is_vowel(c: char) -> bool { is_stressable_vowel(c) || c == 'y' || c == 'ý' }
 
 /// Returns whether `x` and `y` form a diphthong: *ai au ei oi*.
-#[inline]
 #[must_use]
 pub const fn is_diphthong(x: char, y: char) -> bool {
     matches!([x, y], ['a' | 'á' | 'e' | 'é' | 'o' | 'ó', 'i'] | ['a' | 'á', 'u'])
 }
 
-#[inline]
 #[must_use]
 pub(crate) const fn is_annotated_onglide(c: char) -> bool { matches!(c, 'q' | 'w') }
 
-#[inline]
 #[must_use]
 pub(crate) const fn is_annotated_offglide(c: char) -> bool { matches!(c, 'ĭ' | 'ŭ') }
 
 /// Returns whether `c` is *i* or *u*.
-#[inline]
 #[must_use]
 pub const fn could_be_glide(c: char) -> bool { matches!(c, 'i' | 'u') }
 
 /// Normalizes an annotated glide character back to the plain vowel it
 /// represents (*q*/*ĭ* → *i*, *w*/*ŭ* → *u*).
-#[inline]
 #[must_use]
 pub const fn deannotate_glide(c: char) -> char {
     match c {
@@ -175,31 +168,26 @@ pub const fn add_stress_accent(c: char) -> Option<char> {
 
 /// Returns whether `c` is in the given bitset, where bit `i` corresponds to
 /// the letter `b'b' + i`.
-#[inline]
 const fn is_in_set(c: u32, set: u32) -> bool {
     let idx = c.wrapping_sub(b'b' as u32);
     idx < 25 && (set >> idx) & 1 != 0
 }
 
 /// Returns whether `c` is a consonant, *excluding* apostrophe.
-#[inline]
 #[must_use]
 pub const fn is_hard_consonant(c: char) -> bool { is_in_set(c as u32, ALL) }
 
 /// Returns whether `c` is a consonant, *including* apostrophe.
-#[inline]
 #[must_use]
 pub const fn is_consonant(c: char) -> bool { is_hard_consonant(c) || c == '\'' }
 
 /// Returns whether `c` is one of *l m n r*.
-#[inline]
 #[must_use]
 pub const fn is_sonorant(c: char) -> bool { is_in_set(c as u32, SONORANT) }
 
 // - clusters -
 
 /// Returns whether the pair of letters `(x, y)` is allowed by `table`.
-#[inline]
 const fn check_pair(x: u32, y: u32, table: &[u32; 25]) -> bool {
     let xi = x.wrapping_sub(b'b' as u32) as usize;
     let yi = y.wrapping_sub(b'b' as u32) as usize;
@@ -211,7 +199,6 @@ const fn check_pair(x: u32, y: u32, table: &[u32; 25]) -> bool {
 
 /// Returns whether `x` and `y` form a valid consonant cluster. `settings` is
 /// used for `allow_mz`.
-#[inline]
 #[must_use]
 pub const fn is_valid(x: char, y: char, settings: Settings) -> bool {
     let settings = extract_settings!(settings; allow_mz);
@@ -220,7 +207,6 @@ pub const fn is_valid(x: char, y: char, settings: Settings) -> bool {
 }
 
 /// Returns whether `x` and `y` form a valid word-initial consonant cluster.
-#[inline]
 #[must_use]
 pub const fn is_initial(x: char, y: char, settings: Settings) -> bool {
     #[allow(clippy::no_effect_underscore_binding, reason = "why does this lint exist")]
@@ -230,7 +216,6 @@ pub const fn is_initial(x: char, y: char, settings: Settings) -> bool {
 
 /// Returns whether `x`, `y`, and `z` form one of the consonant triples banned
 /// by CLL: *ndj ndz ntc nts*.
-#[inline]
 #[must_use]
 // todo(j4tci): customize
 pub const fn is_banned_triple(x: char, y: char, z: char) -> bool {
@@ -239,7 +224,6 @@ pub const fn is_banned_triple(x: char, y: char, z: char) -> bool {
 
 /// Returns whether `s` is a hard onset (an onset consisting only of characters
 /// that [`is_hard_consonant`]).
-#[inline]
 #[must_use]
 pub const fn is_hard_onset(s: &str, settings: Settings) -> bool {
     match *s.as_bytes() {
@@ -259,7 +243,6 @@ pub const fn is_hard_onset(s: &str, settings: Settings) -> bool {
 
 /// Returns whether `s` is a lujvo hyphen, used to prevent cmavo-shaped rafsi
 /// from falling off the start of a lujvo and to delimit zi'evla inside a lujvo.
-#[inline]
 #[must_use]
 pub const fn is_hyphen(s: &str) -> bool {
     matches!(s.as_bytes(), b"r" | b"n" | b"y" | b"'y" | b"y'" | b"'y'")

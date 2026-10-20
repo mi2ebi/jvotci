@@ -30,7 +30,7 @@ fn onset_h() {
     assert_eq!(Onset::new("'", CLL), Ok(H));
 }
 #[test]
-fn onset_() {
+fn onset_empty() {
     assert_eq!(Onset::new("", CLL), Ok(Empty));
 }
 #[test]
@@ -82,5 +82,5 @@ fn coda_q() {
 
 #[test]
 fn coda_p() {
-    assert_eq!(Coda::new('p'), Some(Coda('p')));
+    assert_eq!(Coda::new('p').map(|c| c.it()), Some('p'));
 }

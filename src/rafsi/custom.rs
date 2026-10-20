@@ -5,7 +5,10 @@ use std::collections::HashMap;
 use itertools::Itertools as _;
 
 use crate::{
-    jvofli::Jvofli::{self, LongRafsiAssignment, RafsiShapeTaken},
+    jvofli::Jvofli::{
+        self, EmptyRafsiAssignment, LongRafsiAssignment, NonLojbanCharacter, RafsiShapeTaken,
+    },
+    phonology::{is_consonant, is_vowel},
     rafsi::{
         RafsiShape::{ArbitraryCmavo, Complete, Truncated},
         classify_rafsi,
@@ -39,7 +42,8 @@ impl Rafste {
     /// Adds a word without giving it any rafsi.
     pub fn add_word(&mut self, word: &str) { self.by_word.entry(word.to_string()).or_default(); }
 
-    /// Tries to assign `rafsi` to `word`.
+    /// Tries to assign `rafsi` to `word`, returning the word that had `rafsi`
+    /// previously, if any.
     ///
     /// # Errors
     ///
@@ -51,7 +55,7 @@ impl Rafste {
         word: &str,
         settings: Settings,
     ) -> Result<Option<String>, Jvofli> {
-        Self::check_against(self.marafsi(word).unwrap_or(&[]), rafsi, word, settings)?;
+        Self::check_against(self.marafsi(word).unwrap_or_default(), rafsi, word, settings)?;
         Ok(self.assign_unchecked(rafsi, word))
     }
 
@@ -105,14 +109,14 @@ impl Rafste {
     /// # Panics
     ///
     /// If any rafsi is assigned multiple times.
-    pub(crate) fn from_words(words: &[(&'static str, &'static [&'static str])]) -> Self {
+    pub(crate) fn from_words(words: &[(&str, &[&str])]) -> Self {
         let mut result = Self::empty();
         for &(word, rafsi) in words {
             assert!(!result.by_word.contains_key(word), "word {{{word}}} appears multiple times");
             result.add_word(word);
             for &r in rafsi {
                 assert!(
-                    !result.marafsi(word).unwrap_or(&[]).iter().any(|x| x == r),
+                    !result.marafsi(word).unwrap_or_default().iter().any(|x| x == r),
                     "rafsi {{{r}}} assigned to {{{word}}} multiple times"
                 );
                 assert!(
@@ -135,6 +139,13 @@ impl Rafste {
         for (word, rafsi) in self.by_word.iter().sorted_by_key(|(word, _)| *word) {
             let mut first_by_shape = HashMap::<_, &str>::with_capacity(rafsi.len());
             for r in rafsi {
+                if r.is_empty() {
+                    errors.push(EmptyRafsiAssignment { word: word.clone() });
+                    continue;
+                }
+                if let Some(bad) = r.chars().find(|&c| !is_consonant(c) && !is_vowel(c)) {
+                    errors.push(NonLojbanCharacter(bad));
+                }
                 let shape = classify_rafsi(r, None, settings);
                 if matches!(shape, Complete | Truncated | ArbitraryCmavo) {
                     errors.push(LongRafsiAssignment {
@@ -172,7 +183,9 @@ impl Rafste {
 
     #[must_use]
     /// Gets the word `rafsi` is assigned to, if it exists.
-    pub fn rafsima(&self, rafsi: &str) -> Option<&String> { self.by_rafsi.get(rafsi) }
+    pub fn rafsima(&self, rafsi: &str) -> Option<&str> {
+        self.by_rafsi.get(rafsi).map(String::as_str)
+    }
 
     #[must_use]
     /// Tries to get the rafsi `word` has, in assignment order.

@@ -1,6 +1,6 @@
 //! Error types.
 
-use std::fmt::{self, Debug, Display};
+use std::fmt::{self, Display};
 
 use thiserror::Error;
 
@@ -23,15 +23,15 @@ pub enum What {
 impl Display for What {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         #[allow(clippy::enum_glob_use, reason = "no silly named wildcards")] use What::*;
-        match self {
-            Cluster => write!(f, "cluster"),
-            ConsonantalSyllable => write!(f, "consonantal syllable"),
-            Diphthong => write!(f, "diphthong"),
-            Nucleus => write!(f, "nucleus"),
-            Onset => write!(f, "onset"),
-            Cmavo => write!(f, "cmavo"),
-            Gismu => write!(f, "gismu"),
-        }
+        f.write_str(match self {
+            Cluster => "cluster",
+            ConsonantalSyllable => "consonantal syllable",
+            Diphthong => "diphthong",
+            Nucleus => "nucleus",
+            Onset => "onset",
+            Cmavo => "cmavo",
+            Gismu => "gismu",
+        })
     }
 }
 
@@ -73,28 +73,13 @@ pub enum Jvofli {
     UnstressablePreBrivlaStart(String),
     #[error("{{{0}}} is at the end of a pre-brivla but it isn't stressable")]
     UnstressablePreBrivlaEnd(String),
+    #[error("you can't give {{{word}}} an empty rafsi")]
+    EmptyRafsiAssignment { word: String },
 }
 
 pub(crate) fn invalid_from_pair(w: What, x: char, y: char) -> Jvofli {
-    Jvofli::Invalid {
-        what: w,
-        value: {
-            let mut str = String::with_capacity(x.len_utf8() + y.len_utf8());
-            str.push(x);
-            str.push(y);
-            str
-        },
-    }
+    Jvofli::Invalid { what: w, value: format!("{x}{y}") }
 }
 pub(crate) fn invalid_cluster_from_triple(x: char, y: char, z: char) -> Jvofli {
-    Jvofli::Invalid {
-        what: What::Cluster,
-        value: {
-            let mut str = String::with_capacity(x.len_utf8() + y.len_utf8() + z.len_utf8());
-            str.push(x);
-            str.push(y);
-            str.push(z);
-            str
-        },
-    }
+    Jvofli::Invalid { what: What::Cluster, value: format!("{x}{y}{z}") }
 }

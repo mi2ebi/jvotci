@@ -15,7 +15,7 @@ use crate::{
 };
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[allow(missing_docs, reason = "nostly obvious")]
+#[allow(missing_docs, reason = "mostly obvious")]
 /// An onset. It can either be empty, an apostrophe, an onglide, or a [hard
 /// onset](`is_hard_onset`).
 pub enum Onset {
@@ -92,7 +92,7 @@ impl Display for Onset {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Empty => Ok(()),
-            H => write!(f, "'"),
+            H => f.write_str("'"),
             Onglide(c) | Self::Single(c) => write!(f, "{c}"),
             Pair([a, b]) => write!(f, "{a}{b}"),
             Triple([a, b, c]) => write!(f, "{a}{b}{c}"),
@@ -167,7 +167,7 @@ impl Nucleus {
 
     #[must_use]
     /// Tries to return the offglide of a [`Diphthong`].
-    pub const fn get_offglide(&self) -> Option<char> {
+    pub const fn offglide(&self) -> Option<char> {
         match self {
             &Diphthong { second, .. } => Some(second),
             _ => None,
@@ -176,7 +176,7 @@ impl Nucleus {
 
     #[must_use]
     /// Tries to return the character in a [`Sonorant`].
-    pub const fn get_sonorant(&self) -> Option<char> {
+    pub const fn sonorant(&self) -> Option<char> {
         match self {
             Sonorant(c) => Some(*c),
             _ => None,
@@ -213,7 +213,7 @@ impl Display for Nucleus {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 /// A coda, containing one hard consonant.
-pub struct Coda(pub char);
+pub struct Coda(char);
 
 impl Coda {
     #[must_use]

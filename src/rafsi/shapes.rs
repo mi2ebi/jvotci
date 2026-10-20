@@ -36,18 +36,14 @@ pub enum RafsiShape {
 }
 impl Display for RafsiShape {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", match self {
+        f.write_str(match self {
             ArbitraryCmavo => "cmavo",
             Complete => "complete-brivla",
             Truncated => "truncated-brivla",
             Prefix => "prefix (CVC)",
             Nice => "nice (CCV)",
-            End { h } =>
-                if *h {
-                    "hiatus (CV'V)"
-                } else {
-                    "diphthong (CF)"
-                },
+            End { h: true } => "hiatus (CV'V)",
+            End { h: false } => "diphthong (CF)",
         })
     }
 }
@@ -72,7 +68,9 @@ pub(crate) fn classify_rafsi(
     next_char: Option<char>,
     settings: Settings,
 ) -> RafsiShape {
-    debug_assert!(text.is_ascii(), "[classify_rafsi] {text} has non ascii");
+    /*  if let Some(bad) = text.chars().find(|c| !c.is_ascii()) {
+        return Err(NonLojbanCharacter(bad));
+    }*/
     let elided = next_char == Some('y');
     let bytes = text.as_bytes();
     if let &[b0, b1, b2] = bytes {
@@ -110,7 +108,7 @@ pub(crate) fn classify_rafsi(
         }
     }
     let Some(&last) = bytes.last() else {
-        unreachable!("[classify_rafsi] requires nonempty text");
+        unreachable!("[classify_rafsi] callers should check non empty")
     };
     if elided && is_stressable_vowel(last as char) {
         return Truncated;
@@ -140,7 +138,7 @@ mod tests {
         assert_eq!(classify_rafsi("lau", None, CLL), End { h: false }, "lau");
     }
     #[test]
-    fn end_diphthongh() {
+    fn end_diphthong_before_h() {
         assert_eq!(classify_rafsi("tei", Some('\''), CLL), End { h: false }, "tei'");
         assert_eq!(classify_rafsi("lau", Some('\''), CLL), End { h: false }, "lau'");
     }

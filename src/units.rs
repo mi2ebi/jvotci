@@ -292,7 +292,7 @@ fn evidence_target_from(
     let passes_evidence = |i: usize| syllables[i].onset.is_h() || nucleus_evidence(i);
     let mut prev_blocker = vec![None; n];
     let mut last = None;
-    for (i, item) in prev_blocker.iter_mut().enumerate().take(n) {
+    for (i, item) in prev_blocker.iter_mut().enumerate() {
         *item = last;
         if !passes_evidence(i) {
             last = Some(i);
@@ -403,9 +403,9 @@ fn resolve_stress_and_split(
             units.push(unit);
             break;
         }
-        let evidence_target = evidence_targets[start]
-            .map(|abs| abs - start)
-            .ok_or_else(|| unreachable!("[rs&s] there's gotta be brivla evidence here right?"))?;
+        let Some(evidence_target) = evidence_targets[start].map(|abs| abs - start) else {
+            unreachable!("[rs&s] there's gotta be brivla evidence here right?");
+        };
         if seg_len < 2 {
             return Err(NotEnoughSyllables(seg[0].to_string()));
         }
@@ -486,7 +486,7 @@ fn resolve_stress_and_split(
         };
         let mut ptr = r_candidates.len();
         let mut split_at = None;
-        for (_, &l) in boundaries.iter().enumerate().rev() {
+        for &l in boundaries.iter().rev() {
             if l > stress_idx || l > evidence_target {
                 continue;
             }
@@ -540,7 +540,7 @@ fn try_merging_units(l: &Unit, mut r: Unit, settings: Settings) -> Result<Unit, 
     let Some(l_last) = l_syl.back().copied() else {
         return Err(r);
     };
-    if let (Some(off), Onglide(on)) = (l_last.nucleus.get_offglide(), r_first.onset)
+    if let (Some(off), Onglide(on)) = (l_last.nucleus.offglide(), r_first.onset)
         && off == on
     {
         return Err(r);
@@ -577,7 +577,7 @@ fn annotate_glides(input: &str) -> Result<Vec<char>, Jvofli> {
     {
         return Err(NonLojbanCharacter(bad));
     }
-    if input.find(['i', 'u', 'í', 'ú']).is_none() {
+    if !input.contains(['i', 'u', 'í', 'ú']) {
         return Ok(input.chars().collect());
     }
     let mut chars = input.chars().collect_vec();
@@ -774,10 +774,8 @@ impl<'a> Unitifier<'a> {
                     continue;
                 }
             };
-            let left_of_onset = pairs
-                .last()
-                .and_then(|s| s.nucleus.get_sonorant())
-                .or_else(|| coda.map(|c| c.it()));
+            let left_of_onset =
+                pairs.last().and_then(|s| s.nucleus.sonorant()).or_else(|| coda.map(|c| c.it()));
             if let Some(pre) = left_of_onset
                 && onset_chars.len() >= 2
                 && is_banned_triple(pre, onset_chars[0], onset_chars[1])
@@ -788,11 +786,10 @@ impl<'a> Unitifier<'a> {
                 continue;
             }
             let onset = Onset::new(&onset_str, self.settings)?;
-            let new_coda = coda;
             self.consonantal_syllable_buffer.clear();
             self.consonantal_syllable_buffer.extend(pairs.into_iter().rev());
             self.pending_consonants.clear();
-            return Ok((onset, new_coda));
+            return Ok((onset, coda));
         }
         Err(best_err.unwrap_or_else(|| Invalid {
             what: What::Cluster,

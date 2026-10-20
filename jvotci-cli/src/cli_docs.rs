@@ -8,11 +8,11 @@ use flower_pot::{
 fn color(c: &str, s: &str) -> String { color_then(c, s, RESET) }
 fn color_then(c: &str, s: &str, t: &str) -> String { format!("{c}{s}{t}") }
 
-pub fn lit(s: &str) -> String { lit_then(s, RESET) }
-pub fn lit_then(s: &str, t: &str) -> String { format!("{BOLD}{BLUE}{s}{t}") }
+fn lit(s: &str) -> String { lit_then(s, RESET) }
+fn lit_then(s: &str, t: &str) -> String { format!("{BOLD}{BLUE}{s}{t}") }
 
-pub fn var(s: &str) -> String { var_then(s, RESET) }
-pub fn var_then(s: &str, t: &str) -> String { format!("{BOLD}{ITALIC}{CYAN}{s}{t}") }
+fn var(s: &str) -> String { var_then(s, RESET) }
+fn var_then(s: &str, t: &str) -> String { format!("{BOLD}{ITALIC}{CYAN}{s}{t}") }
 
 fn ques(s: &str) -> String { format!("{s}?") }
 

@@ -22,11 +22,11 @@ impl Gismu {
     /// # Errors
     /// [`Invalid`] with [`What::Gismu`] if `s` isn't CVCCV or CCVCV shaped.
     #[allow(clippy::many_single_char_names, reason = "letters")]
-    pub fn new(text: &str, settings: Settings) -> Result<Self, Jvofli> {
-        let chars = text.chars().collect::<Vec<_>>();
-        let text = strip_all_stress(text);
-        let shaped = match chars[..] {
-            [a, b, c, d, e] => {
+    pub fn new(s: &str, settings: Settings) -> Result<Self, Jvofli> {
+        let chars = s.chars().collect::<Vec<_>>();
+        let s = strip_all_stress(s);
+        let shaped = match chars.as_slice() {
+            &[a, b, c, d, e] => {
                 is_hard_consonant(a)
                     && is_hard_consonant(d)
                     && is_stressable_vowel(e)
@@ -41,9 +41,9 @@ impl Gismu {
             _ => false,
         };
         if !shaped {
-            return Err(Invalid { what: What::Gismu, value: text });
+            return Err(Invalid { what: What::Gismu, value: s });
         }
-        Ok(Self(text))
+        Ok(Self(s))
     }
 
     #[must_use]
