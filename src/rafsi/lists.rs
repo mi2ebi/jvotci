@@ -2038,8 +2038,8 @@ impl Rafste {
     /// [spreadsheet]: https://docs.google.com/spreadsheets/d/e/2PACX-1vRr_nD2khJ-JdMAP9qnmuXz6c_veVaypf6ExFtKdf4H95wug2dN21ReE9gTpBnywo1S0Kj2ocAEWMF2/pubhtml
     pub fn mati() -> Self {
         let mut r = Self::lensisku();
-        r.assign_unchecked("bam", "bamri");
         r.assign_unchecked("ba'i", "bamri");
+        r.assign_unchecked("bam", "bamri");
         r.assign_unchecked("bek", "bekpi");
         r.assign_unchecked("bil", "bilma");
         r.remove("bo'e");
@@ -2060,8 +2060,8 @@ impl Rafste {
         r.remove("de'o");
         r.assign_unchecked("diz", "dizri");
         r.remove("djo");
-        r.remove("doi");
         r.assign_unchecked("do'a", "dolna");
+        r.remove("doi");
         // r.assign_unchecked("dok","dokcu"); // tbd
         r.remove("do'o");
         r.remove("dul");
@@ -2076,8 +2076,8 @@ impl Rafste {
         r.remove("fo'u");
         r.remove("ful");
         r.assign_unchecked("gad", "ganda");
-        r.remove("ges");
         r.remove("ge'e");
+        r.remove("ges");
         r.remove("gic");
         r.remove("gi'e");
         r.remove("gi'o");
@@ -2088,15 +2088,15 @@ impl Rafste {
         r.remove("jeb");
         r.remove("jgo");
         r.remove("jol");
-        r.remove("jo'o");
         r.remove("jom");
+        r.remove("jo'o");
         r.remove("jor");
         r.assign_unchecked("ju'a", "jukpa");
         r.remove("jub");
         r.remove("jve");
-        r.remove("ke'e");
         r.remove("keb");
         r.remove("ked");
+        r.remove("ke'e");
         r.remove("kej");
         r.remove("kek");
         r.remove("ket");
@@ -2105,11 +2105,10 @@ impl Rafste {
         r.assign_unchecked("kil", "kilto");
         r.assign_unchecked("kom", "kosmu");
         r.remove("kuz");
-        r.remove("la'o");
-        r.remove("lap");
         r.assign_unchecked("lal", "laldo");
         r.assign_unchecked("lan", "lanli");
         r.assign_unchecked("la'o", "laldo");
+        r.remove("lap");
         r.remove("lav");
         r.remove("lem");
         r.remove("let");
